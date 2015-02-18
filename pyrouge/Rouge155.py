@@ -336,6 +336,24 @@ class Rouge155(object):
         rouge_output = check_output(command).decode("UTF-8")
         return rouge_output
 
+    @staticmethod
+    def evaluate_static(home_dir, config_file_path, rouge_args=None):
+        """
+        This is the static version of the evaluate method.
+        Run ROUGE to evaluate the configuration file using the arguments
+        provided.
+
+        Returns: Rouge output as string.
+        """
+        options = rouge_args + ['-m'] + [config_file_path]
+        command = [os.path.join(home_dir, 'ROUGE-1.5.5.pl')] + options
+
+        logger = log.get_global_console_logger()
+        logger.info(
+            "Running ROUGE with command {}".format(" ".join(command)))
+        rouge_output = check_output(command).decode("UTF-8")
+        return rouge_output
+
     def convert_and_evaluate(self, system_id=1,
                              split_sentences=False, rouge_args=None):
         """
