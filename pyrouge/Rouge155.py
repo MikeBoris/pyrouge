@@ -71,17 +71,21 @@ class Rouge155(object):
 
     """
 
-    def __init__(self, rouge_dir=None, rouge_args=None):
+    def __init__(self, rouge_dir=None, verbose=True, rouge_args=None):
         """
         Create a Rouge155 object.
 
             rouge_dir:  Directory containing Rouge-1.5.5.pl
+            verbose:    Prints a detailed log.
             rouge_args: Arguments to pass through to ROUGE if you
                         don't want to use the default pyrouge
                         arguments.
 
         """
         self.log = log.get_global_console_logger()
+        if not verbose:
+            self.log.setLevel(30)   # Disable all "info" logs.
+
         self.__set_dir_properties()
         self._config_file = None
         self._settings_file = self.__get_config_path()
@@ -351,8 +355,7 @@ class Rouge155(object):
         logger = log.get_global_console_logger()
         logger.info(
             "Running ROUGE with command {}".format(" ".join(command)))
-        rouge_output = check_output(command).decode("UTF-8")
-        return rouge_output
+        return check_output(command).decode("UTF-8")
 
     def convert_and_evaluate(self, system_id=1,
                              split_sentences=False, rouge_args=None):
